@@ -22,13 +22,13 @@ export function renderOrderSummary() {
     const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
     const dateString = deliveryDate.format("dddd,MMMM D");
 
-    cartSummaryHTML += `<div class="cart-
-item-container js-order-summary js-cart-item-container  js-cart-item-container-${
+    cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${
       matchingProduct.id
     }">
             <div class="delivery-date">
               Delivery date: ${dateString}
             </div>
+
             <div class="cart-item-details-grid">
               <img class="product-image"
                 src="${matchingProduct.image}">
@@ -40,7 +40,7 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
                 <div class="product-price">
                   $${formatCurrency(matchingProduct.priceCents)}
                 </div>
-                <div class="product-quantity js-product-quantity-${matchingProduct.id}">
+                <div class="product-quantity">
                   <span>
                     Quantity: <span class="quantity-label">${
                       cartItem.quantity
@@ -51,7 +51,7 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
                   </span>
                   <span data-product-id = "${
                     matchingProduct.id
-                  }" class="delete-quantity-link link-primary js-delete-link js-delete-link-${matchingProduct.id}">
+                  }" class="delete-quantity-link link-primary js-delete-link">
                     Delete
                   </span>
                 </div>
@@ -62,7 +62,7 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
                   Choose a delivery option:
                 </div>
                 
-                ${deliveryOptionsHTML(matchingProduct, cartItem)};
+                ${deliveryOptionsHTML(matchingProduct, cartItem)}
               </div>
             </div>
           </div>`;
@@ -72,24 +72,24 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
 
   function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = "";
-    deliveryOptions.forEach((deliveryOptions) => {
+    deliveryOptions.forEach((deliveryOption) => {
       const today = dayjs();
-      const deliveryDate = today.add(deliveryOptions.deliveryDays, "days");
+      const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
       const dateString = deliveryDate.format("dddd,MMMM D");
       const priceString =
-        deliveryOptions.priceCents === 0
+        deliveryOption.priceCents === 0
           ? "FREE"
-          : `₹${deliveryOptions.priceCents / 100}`;
+          : `₹${deliveryOption.priceCents / 100} `;
 
-      const isChecked = deliveryOptions.id === cartItem.deliveryOptionsId;
+      const isChecked = deliveryOption.id === cartItem.deliveryOptionsId;
 
       html += `
           <div class="delivery-option js-delivery-option" data-delivery-option-id="${
-            deliveryOptions.id
+            deliveryOption.id
           }" data-product-id="${matchingProduct.id}">
                         <input 
                           type="radio" 
-                          ${isChecked ? "checked" : ""};
+                          ${isChecked ? "checked" : ""}
                           class="delivery-option-input"
                           name="delivery-option-${matchingProduct.id}">
                         <div>
@@ -97,7 +97,7 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
                             ${dateString}
                           </div>
                           <div class="delivery-option-price">
-                            ${priceString}shipping
+                            ${priceString} Shipping
                           </div>
                         </div>
           </div>
@@ -129,5 +129,4 @@ item-container js-order-summary js-cart-item-container  js-cart-item-container-$
     });
   });
 }
-
 
